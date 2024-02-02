@@ -26,7 +26,7 @@ connect();
 // Your route for getting items
 app.get("/items", async (req, res) => {
   try {
-    const database = client.db("test"); // Replace with your DB name
+    const database = client.db("inventoryDB"); // Replace with your DB name
     const items = database.collection("items");
     const query = {}; // Modify as needed for filtering
     const itemList = await items.find(query).toArray();
