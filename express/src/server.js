@@ -1,8 +1,11 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
+const cors = require("cors");
 
 const app = express();
-const port = 3000;
+const port = 4000;
+
+app.use(cors());
 
 // MongoDB connection setup (replace with your connection details)
 const url = "mongodb://localhost:27017";
