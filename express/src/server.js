@@ -1,3 +1,5 @@
+// server.js
+
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const cors = require("cors");
@@ -35,6 +37,10 @@ app.get("/items", async (req, res) => {
     res.status(500).send(e.message);
   }
 });
+
+// Require and use the medicalSupplies route
+const medicalSuppliesRoute = require("./routes/medicalSupplies");
+app.use("/api/medical-supplies", medicalSuppliesRoute);
 
 // Start the server
 app.listen(port, () => {

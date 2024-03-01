@@ -14,4 +14,18 @@ export const fetchItems = async () => {
   }
 };
 
+// Function to add a new medical supply
+export const addMedicalSupply = async (medicalSupplyData) => {
+  try {
+    const response = await API.post(
+      "/api/medical-supplies/add",
+      medicalSupplyData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error while adding medical supply:", error.response);
+    return null;
+  }
+};
+
 export default API;

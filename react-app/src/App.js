@@ -1,31 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { fetchItems } from "./api/api"; // Adjust the import path based on where you placed api.js
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import Home from "./components/Home";
+import MedicalItems from "./components/MedicalItems";
+import Navigation from "./components/Navigation"; // Import the Navigation component
+import AddMedicalSupply from "./components/AddMedicalSupply"; // Import the AddMedicalSupply component
 
 function App() {
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const itemsData = await fetchItems();
-      if (itemsData) {
-        setItems(itemsData);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
-    <div>
-      <h1>Inventory System</h1>
-      <ul>
-        {items.map((item) => (
-          <li key={item._id}>
-            {item.itemName} - Expiry: {item.itemExpiry}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Router>
+      <Navigation /> {/* Include the Navigation component */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/medical-items" element={<MedicalItems />} />
+        <Route path="/add-medical-supply" element={<AddMedicalSupply />} />{" "}
+      </Routes>
+    </Router>
   );
 }
 
