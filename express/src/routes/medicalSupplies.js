@@ -1,82 +1,44 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 
-// Define the medical supply schema with additional fields
-const medicalSupplySchema = new mongoose.Schema({
-  genericId: { type: String, required: true },
-  itemName: { type: String, required: true },
-  itemDescription: { type: String, required: true },
-  itemCheckedIn: { type: Date, required: true },
-  itemExpiry: { type: Date, required: true },
-  quantity: { type: Number, required: true },
-  unit: { type: String, required: true },
-  batchNumber: { type: String, required: true },
-  location: { type: String, required: true },
-  status: { type: String, required: true },
-  additionalInfo: {
-    createdBy: String,
-    createdAt: Date,
-    modifiedBy: String,
-    modifiedAt: Date,
-  },
-});
-
-// Create a model from the schema
-const MedicalSupply = mongoose.model("MedicalSupply", medicalSupplySchema);
-
-// Define a route for adding a new medical supply
+// Assuming you pass the MongoDB client to this router as middleware
 router.post("/add", async (req, res) => {
+  const db = req.db; // Access the db instance passed from server.js
+  const { genericId, itemName, itemDescription } = req.body;
+
+  if (!genericId || !itemName || !itemDescription) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
   try {
-    // Deconstruct fields from req.body, assuming all fields are provided
-    const {
+    const result = await db.collection("items").insertOne({
+      // Ensure correct collection name
       genericId,
       itemName,
       itemDescription,
-      itemCheckedIn,
-      itemExpiry,
-      quantity,
-      unit,
-      batchNumber,
-      location,
-      status,
-    } = req.body;
+      // Include any other fields as necessary
+    });
 
-    // Validate the input as needed (simple example shown, customize as needed)
-    if (!itemName || !itemDescription) {
-      return res.status(400).json({ message: "Missing required fields" });
+    // Check if the insert operation was acknowledged and an ID was assigned
+    if (result.acknowledged && result.insertedId) {
+      res.status(201).json({
+        message: "Medical supply added successfully",
+        supplyId: result.insertedId, // Use insertedId to confirm successful insertion
+      });
+    } else {
+      throw new Error("Failed to insert medical supply");
     }
-
-    // Construct additionalInfo with server-controlled fields like createdAt
-    const enhancedAdditionalInfo = {
-      ...additionalInfo,
-      createdAt: new Date(), // Set creation date to now
-      modifiedAt: new Date(), // Set modified date to now
-    };
-
-    // Save the new medical supply to the database
-    const newMedicalSupply = await MedicalSupply.create({
-      genericId,
-      itemName,
-      itemDescription,
-      itemCheckedIn,
-      itemExpiry,
-      quantity,
-      unit,
-      batchNumber,
-      location,
-      status,
-      additionalInfo: enhancedAdditionalInfo,
-    });
-
-    // Respond with a success message and the newly created supply
-    res.status(201).json({
-      message: "Medical supply added successfully",
-      supply: newMedicalSupply,
-    });
   } catch (error) {
     console.error("Error adding medical supply:", error);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (error.code === 11000) {
+      res.status(400).json({ message: "Duplicate key error" });
+    } else {
+      // Provide a more informative error message while ensuring it's safe to expose
+      res
+        .status(500)
+        .json({ message: "Internal server error", error: error.message });
+    }
   }
 });
 
