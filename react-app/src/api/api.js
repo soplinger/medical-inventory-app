@@ -28,4 +28,35 @@ export const addMedicalSupply = async (medicalSupplyData) => {
   }
 };
 
+export async function loginUser(credentials) {
+  return fetch("http://localhost:4000/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+}
+
+export async function registerUser(userData) {
+  return fetch("http://localhost:4000/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  }).then((response) => {
+    if (response.ok) {
+      if (response.headers.get("Content-Type")?.includes("application/json")) {
+        return response.json();
+      } else {
+        throw new Error("Response was not JSON");
+      }
+    } else {
+      // Handle HTTP error responses (e.g., 400, 401, 500)
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+  });
+}
+
 export default API;

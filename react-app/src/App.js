@@ -1,4 +1,7 @@
 import React from "react";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Welcome from "./components/Welcome";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Home from "./components/Home";
@@ -11,7 +14,9 @@ function App() {
     <Router>
       <Navigation /> {/* Include the Navigation component */}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/medical-items" element={<MedicalItems />} />
         <Route path="/add-medical-supply" element={<AddMedicalSupply />} />{" "}
       </Routes>
