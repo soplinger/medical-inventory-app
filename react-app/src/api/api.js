@@ -4,9 +4,9 @@ const API = axios.create({
   baseURL: "http://localhost:4000",
 });
 
-export const fetchItems = async () => {
+export const fetchItems = async (page = 1, limit = 10) => {
   try {
-    const { data } = await API.get("/items");
+    const { data } = await API.get(`/inventory?page=${page}&limit=${limit}`);
     return data;
   } catch (error) {
     console.error("Error while fetching items:", error.response);
@@ -14,13 +14,12 @@ export const fetchItems = async () => {
   }
 };
 
-// Function to add a new medical supply
+
+// Updated to reflect the new endpoint and expected data structure
 export const addMedicalSupply = async (medicalSupplyData) => {
   try {
-    const response = await API.post(
-      "/api/medical-supplies/add",
-      medicalSupplyData
-    );
+    // Assuming '/inventory/addItem' is the updated endpoint that now also handles adding medical supplies
+    const response = await API.post('http://localhost:4000/inventory/addItem', medicalSupplyData);
     return response.data;
   } catch (error) {
     console.error("Error while adding medical supply:", error.response);
