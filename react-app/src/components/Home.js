@@ -1,3 +1,10 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * Home.js
+ * Description: Home page component
+ *****************************************************************/
+
 import React from "react";
 
 const Home = () => {

@@ -1,7 +1,14 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * api.js
+ * Description: API calls for the React client.
+ *****************************************************************/
+
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "/",
 });
 
 export const fetchItems = async (page = 1, limit = 10) => {
@@ -19,7 +26,7 @@ export const fetchItems = async (page = 1, limit = 10) => {
 export const addMedicalSupply = async (medicalSupplyData) => {
   try {
     // Assuming '/inventory/addItem' is the updated endpoint that now also handles adding medical supplies
-    const response = await API.post('http://localhost:4000/inventory/addItem', medicalSupplyData);
+    const response = await API.post('/inventory/addItem', medicalSupplyData);
     return response.data;
   } catch (error) {
     console.error("Error while adding medical supply:", error.response);
@@ -28,7 +35,7 @@ export const addMedicalSupply = async (medicalSupplyData) => {
 };
 
 export async function loginUser(credentials) {
-  return fetch("http://localhost:4000/login", {
+  return fetch("/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +45,7 @@ export async function loginUser(credentials) {
 }
 
 export async function registerUser(userData) {
-  return fetch("http://localhost:4000/signup", {
+  return fetch("/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

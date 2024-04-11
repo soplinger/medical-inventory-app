@@ -1,5 +1,13 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * MedicalItems.js
+ * Description: Page that displays the medical items in the inventory.
+ *****************************************************************/
+
 import React, { Component } from "react";
 import { fetchItems } from "../api/api";
+import Navigation from "./Navigation";
 
 class MedicalItems extends Component {
   constructor() {
@@ -95,6 +103,7 @@ class MedicalItems extends Component {
 
     return (
       <div className="container">
+        <Navigation /> {/* Include the Navigation component */}
         <h2 className="my-4">Medical Inventory</h2>
         <table className="table table-striped table-bordered">
           <thead className="thead-dark">

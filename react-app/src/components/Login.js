@@ -1,9 +1,16 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * Login.js
+ * Description: Login component
+ *****************************************************************/
+
 import React, { useState } from "react";
 import { loginUser } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -11,7 +18,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await loginUser({
-        username,
+        email,
         password,
       });
       // Assuming the token is in the response body under the key 'token'
@@ -34,15 +41,15 @@ function Login() {
             <div className="card-body">
               <h5 className="card-title mb-4">Login</h5>
               <div className="mb-3">
-                <label htmlFor="username" className="form-label">
-                  Username:
+                <label htmlFor="email" className="form-label">
+                  Email:
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="mb-3">

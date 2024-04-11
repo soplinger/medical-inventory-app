@@ -1,3 +1,10 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * inventory.js
+ * Description: Inventory routes for the Express server.
+ *****************************************************************/
+
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../config/db');

@@ -1,3 +1,10 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * App.js
+ * Description: Main entry point for the React client.
+ *****************************************************************/
+
 import React from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -12,11 +19,9 @@ import AddMedicalSupply from "./components/AddMedicalSupply"; // Import the AddM
 function App() {
   return (
     <Router>
-      <Navigation /> {/* Include the Navigation component */}
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/medical-items" element={<MedicalItems />} />
         <Route path="/add-medical-supply" element={<AddMedicalSupply />} />{" "}
       </Routes>

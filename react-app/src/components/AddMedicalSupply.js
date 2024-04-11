@@ -1,5 +1,13 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * AddMedicalSupply.js
+ * Description: Page for adding a new medical supply.
+ *****************************************************************/
+
 import React, { useState } from "react";
 import { addMedicalSupply } from "../api/api";
+import Navigation from "./Navigation";
 
 const AddMedicalSupply = () => {
   const [medicalSupplyData, setMedicalSupplyData] = useState({
@@ -54,6 +62,7 @@ const AddMedicalSupply = () => {
 
   return (
     <div>
+      <Navigation /> {/* Include the Navigation component */}
       <h2>Add New Medical Supply</h2>
       <form onSubmit={handleSubmit}>
         {/* Name field */}

@@ -1,3 +1,10 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * Navigation.js
+ * Description: Navigation component for the React client.
+ *****************************************************************/
+
 import React from "react";
 import { Link } from "react-router-dom";
 

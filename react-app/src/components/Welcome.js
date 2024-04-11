@@ -1,4 +1,10 @@
-// Welcome.js
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * Welcome.js
+ * Description: Welcome page component
+ *****************************************************************/
+
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -12,9 +18,11 @@ function Welcome() {
           <Link to="/login" className="btn btn-primary m-2">
             Login
           </Link>
+          {/* Add a link to the Register component 
           <Link to="/register" className="btn btn-secondary m-2">
             Register
           </Link>
+          */}
         </div>
       </div>
     </div>

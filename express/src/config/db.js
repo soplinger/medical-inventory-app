@@ -1,5 +1,14 @@
+/*****************************************************************
+ * Author: Sean Oplinger
+ * Date: 4/10/2024
+ * db.js
+ * Description: Database connection configuration
+ *****************************************************************/
+
+
 require('dotenv').config();
 const mysql = require('mysql2/promise');
+const jwtSecret = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxMjc5MzM4MiwiaWF0IjoxNzEyNzkzMzgyfQ.MAApaET_TzA88Xh2z8dVondrHczlgkztlFCcQBpzuEI";
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -12,5 +21,6 @@ const pool = mysql.createPool({
   });
 
 module.exports = {
-    pool
+    pool,
+    jwtSecret
   };
