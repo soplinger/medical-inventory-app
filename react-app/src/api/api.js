@@ -7,62 +7,68 @@
 
 import axios from "axios";
 
+const baseURL = 'http://localhost:4000/api';
+
 const API = axios.create({
-  baseURL: "/",
+  baseURL: baseURL,
 });
+
+// Improved error handling and logging
+const handleResponse = response => {
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(`HTTP error: ${response.status}`);
+  }
+};
+
+const handleError = (error) => {
+  console.error("API Error:", error.response || error.message);
+  return null;  // Return a consistent error object or message if needed
+};
 
 export const fetchItems = async (page = 1, limit = 10) => {
   try {
-    const { data } = await API.get(`/inventory?page=${page}&limit=${limit}`);
-    return data;
+    const response = await API.get(`/inventory?page=${page}&limit=${limit}`);
+    return handleResponse(response);
   } catch (error) {
-    console.error("Error while fetching items:", error.response);
-    return null;
+    return handleError(error);
   }
 };
 
-
-// Updated to reflect the new endpoint and expected data structure
 export const addMedicalSupply = async (medicalSupplyData) => {
   try {
-    // Assuming '/inventory/addItem' is the updated endpoint that now also handles adding medical supplies
     const response = await API.post('/inventory/addItem', medicalSupplyData);
-    return response.data;
+    return handleResponse(response);
   } catch (error) {
-    console.error("Error while adding medical supply:", error.response);
-    return null;
+    return handleError(error);
   }
 };
 
+
 export async function loginUser(credentials) {
-  return fetch("/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  try {
+    const response = await API.post("/login", credentials);
+    return response.data;
+  } catch (error) {
+    console.error("Login error:", error.response);
+    return null;
+  }
 }
 
 export async function registerUser(userData) {
-  return fetch("/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  }).then((response) => {
-    if (response.ok) {
-      if (response.headers.get("Content-Type")?.includes("application/json")) {
-        return response.json();
-      } else {
-        throw new Error("Response was not JSON");
-      }
+  try {
+    const response = await API.post("/register", userData);
+    if (response.status === 200) {
+      return response.data;
     } else {
-      // Handle HTTP error responses (e.g., 400, 401, 500)
       throw new Error(`HTTP error: ${response.status}`);
     }
-  });
+  } catch (error) {
+    console.error("Registration error:", error.response);
+    return null;
+  }
 }
+
 
 export default API;
