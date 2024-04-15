@@ -22,7 +22,6 @@ jobs:
       working-directory: ./express
       run: |
         npm install
-        npm start  # Assuming this runs your server in production mode
 
     - name: Install dependencies and build React app
       working-directory: ./react-app
