@@ -92,18 +92,22 @@ router.post("/inventory/addFolder", authenticateToken, async (req, res) => {
 });
 
 router.post("/inventory/addItem", authenticateToken, async (req, res) => {
-  let { id, name, parent, archived, code, img, notes, qty, ref, reo, val } =
-    req.body;
-
-  let alerts = req.body.alerts;
+  let {
+    id,
+    name,
+    parent,
+    alerts,
+    archived,
+    code,
+    img,
+    notes,
+    qty,
+    ref,
+    reo,
+    val,
+  } = req.body;
 
   console.log("Received data for item:", req.body); // Log the entire body to see what is received
-
-  try {
-    alerts = JSON.parse(alerts); // Attempt to parse alerts if it's a JSON string
-  } catch (error) {
-    alerts = { message: "N/A" }; // Default to an object directly
-  }
 
   if (id) {
     // Update existing item
