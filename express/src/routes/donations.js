@@ -22,7 +22,7 @@ router.get("/donations/available", authenticateToken, async (req, res) => {
   }
 });
 
-router.post("/donations", authenticateToken, async (req, res) => {
+router.post("/donations/donate", authenticateToken, async (req, res) => {
   const { userId, donations } = req.body; // donations should be an array of { itemId, qty, sent }
 
   if (!donations || !donations.length) {

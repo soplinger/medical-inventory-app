@@ -72,7 +72,7 @@ This document provides an overview of the API endpoints available for managing i
 ### 2. Record Donations
 
 - **Method:** POST
-- **Endpoint:** `/donations`
+- **Endpoint:** `/donations/donate`
 - **Description:** Records donations made by users.
 - **Requires Authentication:** ✅
 - **Body Parameters:**
