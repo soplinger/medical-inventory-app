@@ -69,6 +69,19 @@ This document provides an overview of the API endpoints available for managing i
   - `limit` (integer): Specifies the number of items per page.
   - `search` (string): Filters items by the name field.
   - `sort` (string): Sorts the items by specified fields (e.g., `name_asc`, `qty_desc`).
+- **Sort Keys:**
+  - **Name** (`name`): Sorts alphabetically by item name.
+    - Ascending: `sort=name_asc`
+    - Descending: `sort=name_desc`
+  - **Quantity** (`qty`): Sorts by the quantity in stock.
+    - Ascending: `sort=qty_asc`
+    - Descending: `sort=qty_desc`
+  - **Value** (`val`): Sorts by the value of the items.
+    - Ascending: `sort=val_asc`
+    - Descending: `sort=val_desc`
+  - **ID** (`id`): Sorts by the item's database ID.
+    - Ascending: `sort=id_asc`
+    - Descending: `sort=id_desc`
 - **Example Request:**
   ```plaintext
   GET /inventory?page=1&limit=10&search=widget&sort=name_asc
