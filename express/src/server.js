@@ -14,13 +14,13 @@ const testRoutes = require('./routes/testing');
 const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 4000;
 
 // Define the path to the React build directory
 const buildPath = path.join('/root', 'react-app', 'build');
 
 app.use(cors({
-  origin: '*',
+  origin: 'http://localhost:3000',
   methods: ['GET', 'POST'],
   credentials: true
 }));
