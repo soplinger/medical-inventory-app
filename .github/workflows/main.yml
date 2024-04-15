@@ -29,6 +29,12 @@ jobs:
         npm install
         npm run build
 
+    - name: Install PM2
+      run: sudo npm install pm2@latest -g
+
+    - name: List directory structure
+      run: ls -R $GITHUB_WORKSPACE
+
     - name: Deploy to Server
       uses: appleboy/ssh-action@master
       with:
@@ -36,20 +42,14 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          # Ensure the necessary directories exist
           mkdir -p /root/react-app/express
           mkdir -p /root/react-app/build
 
-          # Stop the current PM2 process
-          pm2 stop web-app || true  # Fails silently if 'web-app' is not found
+          pm2 stop web-app || true  # This fails silently if 'web-app' is not found
 
-          # Synchronize Express backend files
           rsync -av --delete $GITHUB_WORKSPACE/express/ /root/react-app/express/
-
-          # Synchronize React build directory
           rsync -av --delete $GITHUB_WORKSPACE/react-app/build/ /root/react-app/build/
 
-          # Start or reload the PM2 process
           cd /root/react-app
           pm2 start web-app --update-env
 
