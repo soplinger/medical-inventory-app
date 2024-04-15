@@ -152,6 +152,17 @@ This document provides an overview of the API endpoints available for managing i
 GET /items
 ```
 
+### 5. Fetch Inventory Metrics
+
+- **Method:** GET
+- **Endpoint:** `/inventory/metrics`
+- **Description:** Retrieves metrics about the inventory items, including counts of unique and total items, the total value of all items, and the number of out-of-stock items.
+- **Requires Authentication:** ✅
+- **Example Request:**
+  ```plaintext
+  GET /inventory/metrics
+  ```
+
 ## Notes
 
 - All endpoints that require authentication will use a middleware function to ensure the user is authenticated.

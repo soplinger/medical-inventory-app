@@ -183,4 +183,28 @@ router.get("/items", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/inventory/metrics", authenticateToken, async (req, res) => {
+  try {
+    const query = `
+            SELECT 
+                COUNT(DISTINCT id) AS uniqueItems,
+                COUNT(id) AS totalItems,
+                SUM(val) AS totalValue,
+                SUM(CASE WHEN qty = 0 THEN 1 ELSE 0 END) AS outOfStock
+            FROM items
+            WHERE archived = 0;
+        `;
+    const [results] = await pool.query(query);
+    res.json({
+      uniqueItems: results[0].uniqueItems,
+      totalItems: results[0].totalItems,
+      totalValue: results[0].totalValue.toFixed(2),
+      outOfStock: results[0].outOfStock,
+    });
+  } catch (error) {
+    console.error("Error fetching inventory metrics:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = router;
