@@ -2,7 +2,7 @@
  * Author: Sean Oplinger
  * Date: 4/10/2024
  * server.js
- * Description: Express server for the Inventory application.
+ * Description: Express server for the Inventory application. 
  *****************************************************************/
 
 const express = require('express');
