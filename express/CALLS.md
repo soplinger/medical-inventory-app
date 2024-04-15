@@ -69,6 +69,10 @@ This document provides an overview of the API endpoints available for managing i
   - `limit` (integer): Specifies the number of items per page.
   - `search` (string): Filters items by the name field.
   - `sort` (string): Sorts the items by specified fields (e.g., `name_asc`, `qty_desc`).
+- **Example Request:**
+  ```plaintext
+  GET /inventory?page=1&limit=10&search=widget&sort=name_asc
+  ```
 
 ### 2. Add a New Folder
 
@@ -79,6 +83,14 @@ This document provides an overview of the API endpoints available for managing i
 - **Body Parameters:**
   - `name` (string): Name of the folder.
   - `parent` (integer): ID of the parent folder.
+- **Example Request:**
+
+```json
+{
+  "name": "Electronics",
+  "parent": 1
+}
+```
 
 ### 3. Add a New Item
 
@@ -98,6 +110,22 @@ This document provides an overview of the API endpoints available for managing i
   - `ref` (string, optional): Reference link or identifier.
   - `reo` (integer, optional): Reorder level.
   - `val` (integer, default: 0): Value of the item.
+- **Example Request:**
+
+```json
+{
+  "name": "New Widget",
+  "parent": 2,
+  "archived": 0,
+  "code": "NW123",
+  "img": 1,
+  "notes": "Latest model",
+  "qty": 100,
+  "ref": "http://example.com/new-widget",
+  "reo": 10,
+  "val": 15
+}
+```
 
 ### 4. Fetch All Items
 
@@ -105,6 +133,11 @@ This document provides an overview of the API endpoints available for managing i
 - **Endpoint:** `/items`
 - **Description:** Fetches all inventory items that are not archived.
 - **Requires Authentication:** ❌
+- **Example Request:**
+
+```plaintext
+GET /items
+```
 
 ## Notes
 
