@@ -51,6 +51,15 @@ export const addMedicalSupply = async (medicalSupplyData) => {
   }
 };
 
+export const fetchInventoryMetrics = async () => {
+  try {
+    const response = await API.get("/inventory/metrics");
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 export async function loginUser(credentials) {
   try {
     const response = await API.post("/login", credentials);

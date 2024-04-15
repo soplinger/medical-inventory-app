@@ -16,6 +16,7 @@ router.get("/inventory", async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
     const search = req.query.search ? req.query.search.trim() : "";
+    const id = req.query.id ? parseInt(req.query.id) : null; // Parse id if provided
     const sortQuery = req.query.sort || "name_asc";
 
     const validSortFields = ["name", "qty", "val", "id"]; // Extend this list based on your needs
@@ -28,6 +29,11 @@ router.get("/inventory", async (req, res) => {
     if (search) {
       query += ` AND name LIKE ?`;
       queryParams.push(`%${search}%`);
+    }
+
+    if (id) {
+      query += ` AND id = ?`; // Add condition to search by ID
+      queryParams.push(id);
     }
 
     // Sorting logic with validation

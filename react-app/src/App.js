@@ -11,7 +11,8 @@ import Welcome from "./components/Welcome";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import MedicalItems from "./components/MedicalItems";
-import AddMedicalSupply from "./components/AddMedicalSupply"; // Import the AddMedicalSupply component
+import AddMedicalSupply from "./components/AddMedicalSupply"; // Import the AddMedicalSupply
+import Metrics from "./components/Metrics"; // Import the Metrics component
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/medical-items" element={<MedicalItems />} />
         <Route path="/add-medical-supply" element={<AddMedicalSupply />} />{" "}
+        <Route path="/inventory-metrics" element={<Metrics />} />{" "}
       </Routes>
     </Router>
   );

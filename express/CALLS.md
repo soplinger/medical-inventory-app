@@ -56,6 +56,78 @@ This document provides an overview of the API endpoints available for managing i
 - Passwords are hashed using bcrypt with a salt for enhanced security.
 - User registration includes logging the IP address and the time of registration, stored in the user's record.
 
+## API Donation Endpoints
+
+### 1. Fetch Available Donations
+
+- **Method:** GET
+- **Endpoint:** `/donations/available`
+- **Description:** Fetches available donation items with non-zero quantities that are not archived.
+- **Requires Authentication:** ✅
+- **Example Request:**
+  ```plaintext
+  GET /donations/available
+  ```
+
+### 2. Record Donations
+
+- **Method:** POST
+- **Endpoint:** `/donations`
+- **Description:** Records donations made by users.
+- **Requires Authentication:** ✅
+- **Body Parameters:**
+  - `userId` (string): ID of the user making the donation.
+  - `donations` (array): An array of donation objects, each containing:
+    - `itemId` (integer): ID of the donated item.
+    - `qty` (integer): Quantity of the donated item.
+    - `sent` (string, optional): Destination of the donation (defaulted to 'Network' if not provided).
+- **Example Request:**
+  ```json
+  {
+    "userId": "user123",
+    "donations": [
+      {
+        "itemId": 1,
+        "qty": 5,
+        "sent": "Ukraine"
+      },
+      {
+        "itemId": 2,
+        "qty": 10
+      }
+    ]
+  }
+  ```
+
+### 3. Search Donations
+
+- **Method:** GET
+- **Endpoint:** `/donations/search`
+- **Description:** Searches donations with optional pagination, sorting, and search parameters.
+- **Requires Authentication:** ✅
+- **Query Parameters:**
+  - `page` (integer): Specifies the page number in pagination.
+  - `limit` (integer): Specifies the number of items per page.
+  - `search` (string): Filters donations by item name or user.
+  - `sort` (string): Sorts the donations by specified fields (e.g., `time_asc`, `qty_desc`).
+- **Sort Keys:**
+  - **Time** (`time`): Sorts by the time of donation.
+    - Ascending: `sort=time_asc`
+    - Descending: `sort=time_desc`
+  - **Quantity** (`qty`): Sorts by the quantity of donated items.
+    - Ascending: `sort=qty_asc`
+    - Descending: `sort=qty_desc`
+  - **Value** (`val`): Sorts by the value of the donated items.
+    - Ascending: `sort=val_asc`
+    - Descending: `sort=val_desc`
+  - **Sent** (`sent`): Sorts by the destination of the donation.
+    - Ascending: `sort=sent_asc`
+    - Descending: `sort=sent_desc`
+- **Example Request:**
+  ```plaintext
+  GET /donations/search?page=1&limit=10&search=medicine&sort=time_desc
+  ```
+
 ## API Inventory Endpoints
 
 ### 1. Fetch Inventory Items
@@ -68,6 +140,7 @@ This document provides an overview of the API endpoints available for managing i
   - `page` (integer): Specifies the page number in pagination.
   - `limit` (integer): Specifies the number of items per page.
   - `search` (string): Filters items by the name field.
+  - `id` (integer): Filters items by id
   - `sort` (string): Sorts the items by specified fields (e.g., `name_asc`, `qty_desc`).
 - **Sort Keys:**
   - **Name** (`name`): Sorts alphabetically by item name.
