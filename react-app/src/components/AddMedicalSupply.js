@@ -7,6 +7,7 @@
 
 import React, { useState } from "react";
 import { addMedicalSupply } from "../api/api";
+import { fetchItems } from "../api/api";
 import Navigation from "./Navigation";
 
 const AddMedicalSupply = () => {
@@ -14,9 +15,12 @@ const AddMedicalSupply = () => {
     name: "", // Assuming this is a new field to be displayed and submitted
     parent: "", // Assuming this is a new field to be displayed and submitted
     genericId: "",
-    itemName: "", 
+    itemName: "",
     itemDescription: "",
   });
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +28,19 @@ const AddMedicalSupply = () => {
       ...medicalSupplyData,
       [name]: value,
     });
+  };
+
+  const handleSearch = async () => {
+    try {
+      const results = await fetchItems(1, 10, searchQuery);
+      setSearchResults(results.items);
+    } catch (error) {
+      console.error("Error searching items:", error);
+    }
+  };
+
+  const populateForm = (item) => {
+    setMedicalSupplyData({ ...item });
   };
 
   const handleSubmit = async (e) => {
@@ -44,7 +61,7 @@ const AddMedicalSupply = () => {
         genericId: "", // Custom identifier, reset to empty
         itemName: "", // Same as 'name', if different, reset to empty
         itemDescription: "", // Textual description, reset to empty
-        alerts: null, // Not typically provided on creation, set to null or its default presentation in UI
+        alerts: "N/A", // Not typically provided on creation, set to null or its default presentation in UI
         archived: 0, // Default state for new items, assuming non-archived
         code: null, // Unique code if applicable, reset to null or empty string if you're using a form
         img: 1, // Default state indicating the presence of an image; adjust based on actual usage
@@ -54,20 +71,57 @@ const AddMedicalSupply = () => {
         reo: null, // Reordering code or identifier, reset to null or empty string
         val: 0, // Value or price, reset to 0 or a suitable default
       });
-      
     } catch (error) {
       console.error("Error adding medical supply:", error);
     }
   };
 
   return (
-    <div>
+    <div className="container mt-5">
       <Navigation /> {/* Include the Navigation component */}
-      <h2>Add New Medical Supply</h2>
+      <div className="mb-3">
+        <label htmlFor="search" className="form-label">
+          Search Item
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button
+          type="button"
+          className="btn btn-primary mt-2"
+          onClick={handleSearch}
+        >
+          Search
+        </button>
+      </div>
+      <ul className="list-group">
+        {searchResults.map((item) => (
+          <li
+            key={item.id}
+            className="list-group-item d-flex justify-content-between align-items-center"
+          >
+            {item.name}
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-primary"
+              onClick={() => populateForm(item)}
+            >
+              Select
+            </button>
+          </li>
+        ))}
+      </ul>
+      <h2 className="mb-3">Add New Medical Supply</h2>
       <form onSubmit={handleSubmit}>
         {/* Name field */}
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Name</label>
+        <div className="row">
+          <label htmlFor="name" className="form-label">
+            Name
+          </label>
           <input
             type="text"
             className="form-control"
@@ -77,10 +131,12 @@ const AddMedicalSupply = () => {
             onChange={handleInputChange}
           />
         </div>
-        
+
         {/* Parent field */}
         <div className="mb-3">
-          <label htmlFor="parent" className="form-label">Parent ID</label>
+          <label htmlFor="parent" className="form-label">
+            Parent ID
+          </label>
           <input
             type="text"
             className="form-control"
@@ -93,7 +149,9 @@ const AddMedicalSupply = () => {
 
         {/* Generic ID field */}
         <div className="mb-3">
-          <label htmlFor="genericId" className="form-label">Generic ID</label>
+          <label htmlFor="genericId" className="form-label">
+            Generic ID
+          </label>
           <input
             type="text"
             className="form-control"
@@ -106,7 +164,9 @@ const AddMedicalSupply = () => {
 
         {/* Item Name field */}
         <div className="mb-3">
-          <label htmlFor="itemName" className="form-label">Item Name</label>
+          <label htmlFor="itemName" className="form-label">
+            Item Name
+          </label>
           <input
             type="text"
             className="form-control"
@@ -119,7 +179,9 @@ const AddMedicalSupply = () => {
 
         {/* Item Description field */}
         <div className="mb-3">
-          <label htmlFor="itemDescription" className="form-label">Item Description</label>
+          <label htmlFor="itemDescription" className="form-label">
+            Item Description
+          </label>
           <textarea
             className="form-control"
             id="itemDescription"
@@ -131,7 +193,9 @@ const AddMedicalSupply = () => {
 
         {/* New fields */}
         <div className="mb-3">
-          <label htmlFor="alerts" className="form-label">Alerts</label>
+          <label htmlFor="alerts" className="form-label">
+            Alerts
+          </label>
           <input
             type="text"
             className="form-control"
@@ -143,7 +207,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="archived" className="form-label">Archived</label>
+          <label htmlFor="archived" className="form-label">
+            Archived
+          </label>
           <input
             type="number"
             className="form-control"
@@ -155,7 +221,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="code" className="form-label">Code</label>
+          <label htmlFor="code" className="form-label">
+            Code
+          </label>
           <input
             type="text"
             className="form-control"
@@ -167,7 +235,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="img" className="form-label">Image</label>
+          <label htmlFor="img" className="form-label">
+            Image
+          </label>
           <input
             type="number"
             className="form-control"
@@ -179,7 +249,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="notes" className="form-label">Notes</label>
+          <label htmlFor="notes" className="form-label">
+            Notes
+          </label>
           <textarea
             className="form-control"
             id="notes"
@@ -190,7 +262,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="qty" className="form-label">Quantity</label>
+          <label htmlFor="qty" className="form-label">
+            Quantity
+          </label>
           <input
             type="number"
             className="form-control"
@@ -202,7 +276,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="ref" className="form-label">Reference</label>
+          <label htmlFor="ref" className="form-label">
+            Reference
+          </label>
           <input
             type="text"
             className="form-control"
@@ -214,7 +290,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="reo" className="form-label">Reordering</label>
+          <label htmlFor="reo" className="form-label">
+            Reordering
+          </label>
           <input
             type="text"
             className="form-control"
@@ -226,7 +304,9 @@ const AddMedicalSupply = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="val" className="form-label">Value</label>
+          <label htmlFor="val" className="form-label">
+            Value
+          </label>
           <input
             type="number"
             className="form-control"
@@ -240,7 +320,9 @@ const AddMedicalSupply = () => {
         {/* Existing fields */}
         {/* ... */}
 
-        <button type="submit" className="btn btn-primary">Add Medical Supply</button>
+        <button type="submit" className="btn btn-primary">
+          Add Medical Supply
+        </button>
       </form>
     </div>
   );

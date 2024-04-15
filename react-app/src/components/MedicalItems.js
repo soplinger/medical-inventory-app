@@ -16,8 +16,9 @@ class MedicalItems extends Component {
       items: [],
       currentPage: 1,
       totalPages: 0,
-      limit: 10, // You can adjust the limit as needed
-      pageSize: 10, // Number of buttons to show in pagination
+      limit: 10,
+      pageSize: 10,
+      searchQuery: '' // Added to handle search queries
     };
   }
 
@@ -26,9 +27,9 @@ class MedicalItems extends Component {
   }
 
   loadItems = async (page = this.state.currentPage) => {
-    const { limit } = this.state;
+    const { limit, searchQuery } = this.state;
     try {
-      const data = await fetchItems(page, limit);
+      const data = await fetchItems(page, limit, searchQuery); // Updated to include searchQuery
       if (data) {
         this.setState({
           items: data.items,
@@ -44,6 +45,17 @@ class MedicalItems extends Component {
   handlePageChange = (page) => {
     this.loadItems(page);
   };
+
+  handleSearchChange = (event) => {
+    this.setState({ searchQuery: event.target.value });
+  };
+
+  handleSearch = () => {
+    this.setState({ currentPage: 1 }, () => {
+      this.loadItems(1);
+    });
+  };
+  
 
   renderPagination = () => {
     const { totalPages, currentPage, pageSize } = this.state;
@@ -99,12 +111,24 @@ class MedicalItems extends Component {
   };
 
   render() {
-    const { items } = this.state;
+    const { items, searchQuery } = this.state;
 
     return (
       <div className="container">
         <Navigation /> {/* Include the Navigation component */}
         <h2 className="my-4">Medical Inventory</h2>
+        <div className="input-group mb-3">
+        <input 
+            type="text" 
+            className="form-control" 
+            placeholder="Search items" 
+            value={searchQuery}
+            onChange={this.handleSearchChange}
+          />
+          <div className="input-group-append">
+            <button className="btn btn-outline-secondary" type="button" onClick={this.handleSearch}>Search</button>
+          </div>
+        </div>
         <table className="table table-striped table-bordered">
           <thead className="thead-dark">
             <tr>

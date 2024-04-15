@@ -12,17 +12,18 @@ function Welcome() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-6 text-center">
-          <h1>Welcome to Our Application</h1>
-          <p>Please login or register to continue</p>
-          <Link to="/login" className="btn btn-primary m-2">
-            Login
-          </Link>
-          {/* Add a link to the Register component 
-          <Link to="/register" className="btn btn-secondary m-2">
-            Register
-          </Link>
-          */}
+        <div className="col-md-6">
+          <div className="card shadow">
+            <div className="card-body text-center">
+              <h1 className="card-title">Welcome to St. Luke's Inventory</h1>
+              <p className="card-text">Please login to manage the medical inventory.</p>
+              <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <Link to="/login" className="btn btn-primary btn-lg px-4">
+                  <i className="bi bi-box-arrow-in-right"></i> Login
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

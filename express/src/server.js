@@ -10,13 +10,17 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 const inventoryRoutes = require('./routes/inventory');
+const testRoutes = require('./routes/testing');
 const path = require('path');
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 80;
+
+// Define the path to the React build directory
+const buildPath = path.join('/root', 'react-app', 'build');
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: '*',
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -25,13 +29,18 @@ app.use(cookieParser());
 
 app.use('/api', authRoutes);
 app.use('/api', inventoryRoutes);
+app.use('/api', testRoutes);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '..', '..', '..', 'inventory-app', 'react-app', 'build')));
+app.use(express.static(buildPath));
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '..', '..', 'inventory-app', 'react-app', 'build', 'index.html'));
+  res.sendFile(path.join(buildPath, 'index.html'), (err) => {
+    if (err) {
+      res.status(500).send("Server Error: Unable to load the index.html file.");
+    }
+  });
 });
 
 app.listen(port, () => {

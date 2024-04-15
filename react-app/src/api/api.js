@@ -7,10 +7,11 @@
 
 import axios from "axios";
 
-const baseURL = 'http://localhost:4000/api';
+const baseURL = '/api';
 
 const API = axios.create({
   baseURL: baseURL,
+  withCredentials: true
 });
 
 // Improved error handling and logging
@@ -27,14 +28,20 @@ const handleError = (error) => {
   return null;  // Return a consistent error object or message if needed
 };
 
-export const fetchItems = async (page = 1, limit = 10) => {
+export const fetchItems = async (page = 1, limit = 10, searchQuery = '') => {
   try {
-    const response = await API.get(`/inventory?page=${page}&limit=${limit}`);
+    let queryParams = `?page=${page}&limit=${limit}`;
+    if (searchQuery) {
+      queryParams += `&search=${encodeURIComponent(searchQuery)}`;
+    }
+
+    const response = await API.get(`/inventory${queryParams}`);
     return handleResponse(response);
   } catch (error) {
     return handleError(error);
   }
 };
+
 
 export const addMedicalSupply = async (medicalSupplyData) => {
   try {
