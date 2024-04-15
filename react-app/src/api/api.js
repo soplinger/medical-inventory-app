@@ -7,15 +7,15 @@
 
 import axios from "axios";
 
-const baseURL = 'http://localhost:3000/api';
+const baseURL = "http://localhost:4000/api";
 
 const API = axios.create({
   baseURL: baseURL,
-  withCredentials: true
+  withCredentials: true,
 });
 
 // Improved error handling and logging
-const handleResponse = response => {
+const handleResponse = (response) => {
   if (response.status === 200) {
     return response.data;
   } else {
@@ -25,10 +25,10 @@ const handleResponse = response => {
 
 const handleError = (error) => {
   console.error("API Error:", error.response || error.message);
-  return null;  // Return a consistent error object or message if needed
+  return null; // Return a consistent error object or message if needed
 };
 
-export const fetchItems = async (page = 1, limit = 10, searchQuery = '') => {
+export const fetchItems = async (page = 1, limit = 10, searchQuery = "") => {
   try {
     let queryParams = `?page=${page}&limit=${limit}`;
     if (searchQuery) {
@@ -42,16 +42,14 @@ export const fetchItems = async (page = 1, limit = 10, searchQuery = '') => {
   }
 };
 
-
 export const addMedicalSupply = async (medicalSupplyData) => {
   try {
-    const response = await API.post('/inventory/addItem', medicalSupplyData);
+    const response = await API.post("/inventory/addItem", medicalSupplyData);
     return handleResponse(response);
   } catch (error) {
     return handleError(error);
   }
 };
-
 
 export async function loginUser(credentials) {
   try {
@@ -76,6 +74,5 @@ export async function registerUser(userData) {
     return null;
   }
 }
-
 
 export default API;
