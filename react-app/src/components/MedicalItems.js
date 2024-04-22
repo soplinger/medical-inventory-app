@@ -55,7 +55,29 @@ class MedicalItems extends Component {
       this.loadItems(1);
     });
   };
-  
+
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      showModal: !prevState.showModal
+    }));
+  };
+
+  // Update the selected category filter
+  handleCategoryChange = (event) => {
+    this.setState({ selectedCategory: event.target.value });
+  };
+
+  // Apply filters and reload data
+  applyFilters = () => {
+    this.toggleModal();
+    this.loadItems();
+  };
+
+  handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      this.handleSearch();
+    }
+  };
 
   renderPagination = () => {
     const { totalPages, currentPage, pageSize } = this.state;
@@ -111,7 +133,7 @@ class MedicalItems extends Component {
   };
 
   render() {
-    const { items, searchQuery } = this.state;
+    const { items, searchQuery, showModal } = this.state;
 
     return (
       <div className="container">
@@ -124,11 +146,48 @@ class MedicalItems extends Component {
             placeholder="Search items" 
             value={searchQuery}
             onChange={this.handleSearchChange}
+            onKeyDown={this.handleKeyDown}
           />
           <div className="input-group-append">
             <button className="btn btn-outline-secondary" type="button" onClick={this.handleSearch}>Search</button>
           </div>
+          <div className="input-group-append">
+            {/*Filter Button*/}
+            <button className="btn btn-primary" onClick={this.toggleModal}>Filter</button>
+          </div>
         </div>
+
+        {/* Modal component */}
+        {showModal && (
+          <div className="modal" tabIndex="-1" role="dialog" style={{ display: "block" }}>
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Select Filter</h5>
+                  <button type="button" className="close" onClick={this.toggleModal} aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <div className="form-group">
+                    <label htmlFor="category">Category:</label>
+                    <select className="form-control" id="category">
+                      <option value="No Filter">No Filter</option>
+                      <option value="Quantity Low to High">Quantity Low to High</option>
+                      <option value="Quantity High to Low">Quantity High to Low</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" onClick={this.toggleModal}>Close</button>
+                  <button type="button" className="btn btn-primary">Apply Filters</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="table-responsive">
         <table className="table table-striped table-bordered">
           <thead className="thead-dark">
             <tr>
@@ -163,6 +222,7 @@ class MedicalItems extends Component {
             ))}
           </tbody>
         </table>
+        </div>
         <div className="d-flex justify-content-center">
           {this.renderPagination()}
         </div>
