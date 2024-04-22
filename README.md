@@ -89,6 +89,17 @@ Once all parts of the application are set up, you can access:
 - The MySQL script can be found in the `scripts` directory.
 - Use this script to manage the database schema and initial data setup.
 
+## Deploying Production Build
+
+Build the production version of the app
+```npm run build```
+
+Now move the entire project directory into a server of your choosing and
+open up the /express folder within a terminal and run this command
+```npm start```
+
+This should now run both the front-end and the back-end together.
+
 ## Authors
 
 - **Sean Oplinger** - _Initial work_ - [soplinger](https://github.com/soplinger)
