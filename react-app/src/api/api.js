@@ -7,7 +7,7 @@
 
 import axios from "axios";
 
-const baseURL = "http://localhost:4000/api";
+const baseURL = "/api";
 
 const API = axios.create({
   baseURL: baseURL,
@@ -83,5 +83,35 @@ export async function registerUser(userData) {
     return null;
   }
 }
+
+// Fetch available donations
+export const fetchAvailableDonations = async () => {
+  try {
+    const response = await API.get("/donations/available");
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+// Record donations made by users
+export const recordDonation = async (donationData) => {
+  try {
+    const response = await API.post("/donations/donate", donationData);
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+// Search donations
+export const searchDonations = async (searchParams) => {
+  try {
+    const response = await API.get(`/donations/search${searchParams}`);
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
 
 export default API;

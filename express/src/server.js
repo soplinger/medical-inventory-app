@@ -22,7 +22,7 @@ const buildPath = path.join("/root", "react-app", "build");
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true,
   })

@@ -42,6 +42,11 @@ const Navigation = () => (
               Inventory Metrics
             </Link>
           </li>
+          <li className="nav-item">
+            <Link to="/donations" className="nav-link">
+              Donations
+            </Link>
+          </li>
           {/* Add more navigation links as needed */}
         </ul>
       </div>

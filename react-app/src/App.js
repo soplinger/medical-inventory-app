@@ -8,6 +8,7 @@
 import React from "react";
 import Login from "./components/Login";
 import Welcome from "./components/Welcome";
+import Donations from "./components/Donations";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import MedicalItems from "./components/MedicalItems";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/medical-items" element={<MedicalItems />} />
         <Route path="/add-medical-supply" element={<AddMedicalSupply />} />{" "}
         <Route path="/inventory-metrics" element={<Metrics />} />{" "}
+        <Route path="/donations" element={<Donations />} />
       </Routes>
     </Router>
   );
