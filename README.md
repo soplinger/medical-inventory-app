@@ -92,11 +92,11 @@ Once all parts of the application are set up, you can access:
 ## Deploying Production Build
 
 Build the production version of the app
-`npm run build`
+```npm run build```
 
 Now move the entire project directory into a server of your choosing and
 open up the /express folder within a terminal and run this command
-`npm start`
+```npm start```
 
 This should now run both the front-end and the back-end together.
 
