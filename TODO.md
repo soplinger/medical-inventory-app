@@ -2,8 +2,8 @@
 
 ## THROUGHOUT THE APP
 
-- Update bootstrap and styling to be consistent
-- Setup SSL
+- [] Update bootstrap and styling to be consistent
+- [] Setup SSL
 
 ## ADD HISTORY PAGE
 
@@ -11,27 +11,27 @@
 
 ## ADD USER REGISTRATION PAGE
 
-- Add page that admins can access that allow for registration of a new user
+- [] Add page that admins can access that allow for registration of a new user
 
 ## ADD SETTINGS PAGE
 
-- Add a settings page that allows a user to change their password
+- [] Add a settings page that allows a user to change their password
 
 ## UPDATE MEDICALITEMS PAGE
 
-- Add functionality to filters
+- [] Add functionality to filters
 
 ## UPDATE ADDMEDICALSUPPLY PAGE
 
-- Change to be edit medical supplies
-- Add barcode and QR code functionality
+- [] Change to be edit medical supplies
+- [] Add barcode and QR code functionality
 
 ## UPDATE DONATIONS PAGE
 
-- Make input fields more clear
-- Show history as default table and enable searching donations
+- [] Make input fields more clear
+- [] Show history as default table and enable searching donations
 
 ## NAVIGATION BAR
 
-- Add logout button
-- Make it consistent throughout the app
+- [] Add logout button
+- [] Make it consistent throughout the app
