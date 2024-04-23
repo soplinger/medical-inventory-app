@@ -98,4 +98,42 @@ router.post("/register", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/isAdmin", authenticateToken, async (req, res) => {
+  try {
+    // Assuming the user ID is stored in req.user when authenticated
+    if (!req.user) {
+      return res.status(403).send("No authentication token provided");
+    }
+
+    const userId = req.user.userId; // Get the user ID from token
+
+    // Fetch the user's permissions from the database
+    const [[user]] = await pool.query("SELECT perms FROM users WHERE id = ?", [
+      userId,
+    ]);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Check if the permissions include 'admin'
+    const isAdmin = user.perms === "admin";
+    res.json({ isAdmin });
+  } catch (error) {
+    console.error("Error checking admin status:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post("/logout", (req, res) => {
+  // Clear the token cookie by setting its expiration to a past date
+  res.cookie("token", "", {
+    httpOnly: true,
+    sameSite: "strict",
+    expires: new Date(0), // Set expires to epoch time
+  });
+
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
 module.exports = router;

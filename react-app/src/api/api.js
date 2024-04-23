@@ -7,7 +7,7 @@
 
 import axios from "axios";
 
-const baseURL = "/api";
+const baseURL = "http://localhost:4000/api";
 
 const API = axios.create({
   baseURL: baseURL,
@@ -85,11 +85,16 @@ export async function registerUser(userData) {
 }
 
 // Fetch available donations
-export const fetchAvailableDonations = async () => {
+// In api.js
+// Fetch available donations
+export const fetchAvailableDonations = async (searchQuery = "") => {
   try {
-    const response = await API.get("/donations/available");
+    const response = await API.get(
+      `/donations/available?search=${encodeURIComponent(searchQuery)}`
+    );
     return handleResponse(response);
   } catch (error) {
+    console.error("Failed to fetch available donations:", error);
     return handleError(error);
   }
 };
@@ -111,6 +116,63 @@ export const searchDonations = async (searchParams) => {
     return handleResponse(response);
   } catch (error) {
     return handleError(error);
+  }
+};
+
+export const addHistoryRecord = async (historyData) => {
+  try {
+    const response = await API.post("/history/add", historyData);
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const fetchHistoryLogs = async ({
+  page = 1,
+  limit = 10,
+  sort = "time_desc",
+}) => {
+  try {
+    const queryParams = `?page=${page}&limit=${limit}&sort=${encodeURIComponent(
+      sort
+    )}`;
+    const response = await API.get(`/history/logs${queryParams}`);
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export async function getItemById(itemId) {
+  try {
+    const response = await API.post("/item", { itemId: itemId });
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("SQL Item Code Query Error: ", error.response);
+    return null;
+  }
+}
+
+export const logoutUser = async () => {
+  try {
+    const response = await API.post("/logout");
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const isAdmin = async () => {
+  try {
+    const response = await API.get("/isAdmin"); // Making a GET request to check admin status
+    return handleResponse(response); // Handle response using the predefined function
+  } catch (error) {
+    return handleError(error); // Handle any errors that occur
   }
 };
 

@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.camera-preview {
+  width: 100%; /* Ensures it does not exceed the modal width */
+  height: auto; /* Maintains aspect ratio */
+  max-height: 400px; /* Maximum height to fit within the modal */
+}

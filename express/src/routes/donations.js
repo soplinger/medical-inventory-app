@@ -12,8 +12,10 @@ const authenticateToken = require("./authMiddleware");
 
 router.get("/donations/available", authenticateToken, async (req, res) => {
   try {
+    const search = req.query.search || ""; // Get search query from URL parameters
     const [items] = await pool.query(
-      "SELECT id, name, qty, val FROM items WHERE archived = 0 AND qty > 0"
+      "SELECT id, name, qty, val FROM items WHERE archived = 0 AND qty > 0 AND name LIKE ?",
+      [`%${search}%`] // Use the LIKE operator for partial matching
     );
     res.json(items);
   } catch (error) {

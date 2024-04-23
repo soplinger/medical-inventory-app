@@ -18,7 +18,7 @@ class MedicalItems extends Component {
       totalPages: 0,
       limit: 10,
       pageSize: 10,
-      searchQuery: '' // Added to handle search queries
+      searchQuery: "", // Added to handle search queries
     };
   }
 
@@ -58,7 +58,7 @@ class MedicalItems extends Component {
 
   toggleModal = () => {
     this.setState((prevState) => ({
-      showModal: !prevState.showModal
+      showModal: !prevState.showModal,
     }));
   };
 
@@ -74,7 +74,7 @@ class MedicalItems extends Component {
   };
 
   handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       this.handleSearch();
     }
   };
@@ -91,7 +91,9 @@ class MedicalItems extends Component {
           <button
             key={i}
             onClick={() => this.handlePageChange(i)}
-            className={`btn btn-sm ${currentPage === i ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn btn-sm ${
+              currentPage === i ? "btn-primary" : "btn-secondary"
+            }`}
           >
             {i}
           </button>
@@ -103,25 +105,37 @@ class MedicalItems extends Component {
           <button
             key={1}
             onClick={() => this.handlePageChange(1)}
-            className={`btn btn-sm ${currentPage === 1 ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn btn-sm ${
+              currentPage === 1 ? "btn-primary" : "btn-secondary"
+            }`}
           >
             1
           </button>
         );
         if (startPage > 2) {
-          pages.unshift(<span key="ellipsis-start" className="px-2">...</span>);
+          pages.unshift(
+            <span key="ellipsis-start" className="px-2">
+              ...
+            </span>
+          );
         }
       }
 
       if (endPage < totalPages) {
         if (endPage < totalPages - 1) {
-          pages.push(<span key="ellipsis-end" className="px-2">...</span>);
+          pages.push(
+            <span key="ellipsis-end" className="px-2">
+              ...
+            </span>
+          );
         }
         pages.push(
           <button
             key={totalPages}
             onClick={() => this.handlePageChange(totalPages)}
-            className={`btn btn-sm ${currentPage === totalPages ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn btn-sm ${
+              currentPage === totalPages ? "btn-primary" : "btn-secondary"
+            }`}
           >
             {totalPages}
           </button>
@@ -136,95 +150,115 @@ class MedicalItems extends Component {
     const { items, searchQuery, showModal } = this.state;
 
     return (
-      <div className="container">
+      <div>
         <Navigation /> {/* Include the Navigation component */}
-        <h2 className="my-4">Medical Inventory</h2>
-        <div className="input-group mb-3">
-        <input 
-            type="text" 
-            className="form-control" 
-            placeholder="Search items" 
-            value={searchQuery}
-            onChange={this.handleSearchChange}
-            onKeyDown={this.handleKeyDown}
-          />
-          <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="button" onClick={this.handleSearch}>Search</button>
+        <div className="container">
+          <h2 className="my-4">Medical Inventory</h2>
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search items"
+              value={searchQuery}
+              onChange={this.handleSearchChange}
+              onKeyDown={this.handleKeyDown}
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={this.handleSearch}
+              >
+                Search
+              </button>
+            </div>
+            <div className="input-group-append">
+              {/*Filter Button*/}
+              <button className="btn btn-primary" onClick={this.toggleModal}>
+                Filter
+              </button>
+            </div>
           </div>
-          <div className="input-group-append">
-            {/*Filter Button*/}
-            <button className="btn btn-primary" onClick={this.toggleModal}>Filter</button>
-          </div>
-        </div>
-
-        {/* Modal component */}
-        {showModal && (
-          <div className="modal" tabIndex="-1" role="dialog" style={{ display: "block" }}>
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Select Filter</h5>
-                  <button type="button" className="close" onClick={this.toggleModal} aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <div className="form-group">
-                    <label htmlFor="category">Category:</label>
-                    <select className="form-control" id="category">
-                      <option value="No Filter">No Filter</option>
-                      <option value="Quantity Low to High">Quantity Low to High</option>
-                      <option value="Quantity High to Low">Quantity High to Low</option>
-                    </select>
+          {/* Modal component */}
+          {showModal && (
+            <div
+              className="modal"
+              tabIndex="-1"
+              role="dialog"
+              style={{ display: "block" }}
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Select Filter</h5>
+                    <button
+                      type="button"
+                      className="close"
+                      onClick={this.toggleModal}
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                   </div>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={this.toggleModal}>Close</button>
-                  <button type="button" className="btn btn-primary">Apply Filters</button>
+                  <div className="modal-body">
+                    <div className="form-group">
+                      <label htmlFor="category">Category:</label>
+                      <select className="form-control" id="category">
+                        <option value="No Filter">No Filter</option>
+                        <option value="Quantity Low to High">
+                          Quantity Low to High
+                        </option>
+                        <option value="Quantity High to Low">
+                          Quantity High to Low
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={this.toggleModal}
+                    >
+                      Close
+                    </button>
+                    <button type="button" className="btn btn-primary">
+                      Apply Filters
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+          )}
+          <div className="table-responsive">
+            <table className="table table-striped table-bordered">
+              <thead className="thead-dark">
+                <tr>
+                  <th>Item Name</th>
+                  <th>Ref. Number</th>
+                  <th>Quantity</th>
+                  <th>Value</th>
+                  <th>Notes</th>
+                  <th>Code</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{item.ref || "N/A"}</td>
+                    <td>{item.qty}</td>
+                    <td>${item.val.toFixed(2)}</td>
+                    <td>{item.notes || "No notes"}</td>
+                    <td>{item.code || "N/A"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
-
-        <div className="table-responsive">
-        <table className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            <tr>
-              <th>Item Name</th>
-              <th>Ref. Number</th>
-              <th>Quantity</th>
-              <th>Value</th>
-              <th>Notes</th>
-              <th>Alerts</th>
-              <th>Archived</th>
-              <th>Code</th>
-              <th>Image</th>
-              <th>Parent ID</th>
-              <th>Reorder</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.ref || 'N/A'}</td>
-                <td>{item.qty}</td>
-                <td>${item.val.toFixed(2)}</td>
-                <td>{item.notes || 'No notes'}</td>
-                <td>{item.alerts || 'N/A'}</td>
-                <td>{item.archived ? 'Yes' : 'No'}</td>
-                <td>{item.code || 'N/A'}</td>
-                <td>{item.img ? 'Yes' : 'No'}</td>
-                <td>{item.parent}</td>
-                <td>{item.reo || 'N/A'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
-        <div className="d-flex justify-content-center">
-          {this.renderPagination()}
+          <div className="d-flex justify-content-center">
+            {this.renderPagination()}
+          </div>
         </div>
       </div>
     );

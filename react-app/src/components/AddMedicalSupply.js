@@ -1,329 +1,179 @@
-/*****************************************************************
- * Author: Sean Oplinger
- * Date: 4/10/2024
- * AddMedicalSupply.js
- * Description: Page for adding a new medical supply.
- *****************************************************************/
-
 import React, { useState } from "react";
-import { addMedicalSupply } from "../api/api";
-import { fetchItems } from "../api/api";
+import { Modal, Button } from "react-bootstrap";
+import { addMedicalSupply, fetchItems } from "../api/api";
 import Navigation from "./Navigation";
+import CodeScanner from "./CodeScanner";
+import "../App.css";
 
 const AddMedicalSupply = () => {
   const [medicalSupplyData, setMedicalSupplyData] = useState({
-    name: "", // Assuming this is a new field to be displayed and submitted
-    parent: "", // Assuming this is a new field to be displayed and submitted
+    name: "",
+    parent: "",
     genericId: "",
     itemName: "",
     itemDescription: "",
+    alerts: "",
+    archived: 0,
+    code: "",
+    img: 1,
+    notes: "",
+    qty: 0,
+    ref: "",
+    reo: "",
+    val: 0,
   });
-
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [scannerType, setScannerType] = useState("none");
+  const [showModal, setShowModal] = useState(false); // State to control the modal display
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setMedicalSupplyData({
-      ...medicalSupplyData,
-      [name]: value,
-    });
+    setMedicalSupplyData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const changeCode = (type) => {
+    setScannerType(type);
+    setShowModal(true); // Open the modal when a scanner type is selected
+  };
+
+  const handleModalClose = () => setShowModal(false); // Function to close the modal
+
   const handleSearch = async () => {
-    try {
-      const results = await fetchItems(1, 10, searchQuery);
-      setSearchResults(results.items);
-    } catch (error) {
-      console.error("Error searching items:", error);
-    }
+    const results = await fetchItems(1, 10, searchQuery);
+    setSearchResults(results.items);
   };
 
   const populateForm = (item) => {
-    setMedicalSupplyData({ ...item });
+    setMedicalSupplyData(item);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Basic validation example
-    if (!medicalSupplyData.name || !medicalSupplyData.parent) {
-      console.error("Missing required 'name' or 'parent' field");
-      return;
-    }
-
-    try {
-      const response = await addMedicalSupply(medicalSupplyData);
-      console.log("Medical supply added:", response);
-      // Clear form fields after successful submission
-      setMedicalSupplyData({
-        name: "", // String input by user
-        parent: "", // Likely an ID from a selection or another input mechanism
-        genericId: "", // Custom identifier, reset to empty
-        itemName: "", // Same as 'name', if different, reset to empty
-        itemDescription: "", // Textual description, reset to empty
-        alerts: "N/A", // Not typically provided on creation, set to null or its default presentation in UI
-        archived: 0, // Default state for new items, assuming non-archived
-        code: null, // Unique code if applicable, reset to null or empty string if you're using a form
-        img: 1, // Default state indicating the presence of an image; adjust based on actual usage
-        notes: "", // Additional notes, reset to empty
-        qty: 0, // Quantity, reset to 0 or a suitable default for new items
-        ref: null, // Reference code or number, reset to null or empty string
-        reo: null, // Reordering code or identifier, reset to null or empty string
-        val: 0, // Value or price, reset to 0 or a suitable default
-      });
-    } catch (error) {
-      console.error("Error adding medical supply:", error);
-    }
+    const response = await addMedicalSupply(medicalSupplyData);
+    console.log("Medical supply added:", response);
+    setMedicalSupplyData({
+      name: "",
+      parent: "",
+      genericId: "",
+      itemName: "",
+      itemDescription: "",
+      alerts: "",
+      archived: 0,
+      code: "",
+      img: 1,
+      notes: "",
+      qty: 0,
+      ref: "",
+      reo: "",
+      val: 0,
+    });
   };
 
   return (
-    <div className="container mt-5">
-      <Navigation /> {/* Include the Navigation component */}
-      <div className="mb-3">
-        <label htmlFor="search" className="form-label">
-          Search Item
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button
-          type="button"
-          className="btn btn-primary mt-2"
-          onClick={handleSearch}
-        >
-          Search
-        </button>
-      </div>
-      <ul className="list-group">
-        {searchResults.map((item) => (
-          <li
-            key={item.id}
-            className="list-group-item d-flex justify-content-between align-items-center"
+    <div>
+      <Navigation />
+      <div className="container mt-5">
+        <h2 className="mb-3">Add/Edit Medical Supply</h2>
+        <div className="mb-3">
+          <label htmlFor="search" className="form-label">
+            Search Item
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="btn btn-primary mt-2" onClick={handleSearch}>
+            Search
+          </button>
+        </div>
+
+        <div className="mb-3">
+          <button
+            className="btn btn-secondary"
+            onClick={() => changeCode("barcode")}
           >
-            {item.name}
-            <button
-              type="button"
-              className="btn btn-sm btn-outline-primary"
-              onClick={() => populateForm(item)}
-            >
-              Select
-            </button>
-          </li>
-        ))}
-      </ul>
-      <h2 className="mb-3">Add New Medical Supply</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Name field */}
-        <div className="row">
-          <label htmlFor="name" className="form-label">
-            Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            value={medicalSupplyData.name}
-            onChange={handleInputChange}
-          />
+            Scan Barcode
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => changeCode("qr_code")}
+          >
+            Scan QR Code
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => changeCode("data_matrix")}
+          >
+            Scan Data Matrix
+          </button>
         </div>
 
-        {/* Parent field */}
-        <div className="mb-3">
-          <label htmlFor="parent" className="form-label">
-            Parent ID
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="parent"
-            name="parent"
-            value={medicalSupplyData.parent}
-            onChange={handleInputChange}
-          />
-        </div>
+        {searchResults.length > 0 && (
+          <ul className="list-group mb-3">
+            {searchResults.map((item) => (
+              <li
+                key={item.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {item.name}
+                <button
+                  className="btn btn-sm btn-outline-primary"
+                  onClick={() => populateForm(item)}
+                >
+                  Select
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
 
-        {/* Generic ID field */}
-        <div className="mb-3">
-          <label htmlFor="genericId" className="form-label">
-            Generic ID
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="genericId"
-            name="genericId"
-            value={medicalSupplyData.genericId}
-            onChange={handleInputChange}
-          />
-        </div>
+        <Modal show={showModal} onHide={handleModalClose} size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>Scan Code</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <CodeScanner
+              className="camera-preview"
+              scanType={scannerType}
+              populateForm={populateForm}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleModalClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-        {/* Item Name field */}
-        <div className="mb-3">
-          <label htmlFor="itemName" className="form-label">
-            Item Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="itemName"
-            name="itemName"
-            value={medicalSupplyData.itemName}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {/* Item Description field */}
-        <div className="mb-3">
-          <label htmlFor="itemDescription" className="form-label">
-            Item Description
-          </label>
-          <textarea
-            className="form-control"
-            id="itemDescription"
-            name="itemDescription"
-            value={medicalSupplyData.itemDescription}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {/* New fields */}
-        <div className="mb-3">
-          <label htmlFor="alerts" className="form-label">
-            Alerts
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="alerts"
-            name="alerts"
-            value={medicalSupplyData.alerts}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="archived" className="form-label">
-            Archived
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="archived"
-            name="archived"
-            value={medicalSupplyData.archived}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="code" className="form-label">
-            Code
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="code"
-            name="code"
-            value={medicalSupplyData.code}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="img" className="form-label">
-            Image
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="img"
-            name="img"
-            value={medicalSupplyData.img}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="notes" className="form-label">
-            Notes
-          </label>
-          <textarea
-            className="form-control"
-            id="notes"
-            name="notes"
-            value={medicalSupplyData.notes}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="qty" className="form-label">
-            Quantity
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="qty"
-            name="qty"
-            value={medicalSupplyData.qty}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="ref" className="form-label">
-            Reference
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="ref"
-            name="ref"
-            value={medicalSupplyData.ref}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="reo" className="form-label">
-            Reordering
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="reo"
-            name="reo"
-            value={medicalSupplyData.reo}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="val" className="form-label">
-            Value
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="val"
-            name="val"
-            value={medicalSupplyData.val}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {/* Existing fields */}
-        {/* ... */}
-
-        <button type="submit" className="btn btn-primary">
-          Add Medical Supply
-        </button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          {Object.entries(medicalSupplyData).map(([key, value]) => (
+            <div className="mb-3" key={key}>
+              <label htmlFor={key} className="form-label">
+                {key.charAt(0).toUpperCase() +
+                  key
+                    .slice(1)
+                    .replace(/([A-Z])/g, " $1")
+                    .trim()}
+              </label>
+              <input
+                type={typeof value === "number" ? "number" : "text"}
+                className="form-control"
+                id={key}
+                name={key}
+                value={value}
+                onChange={handleInputChange}
+              />
+            </div>
+          ))}
+          <button type="submit" className="btn btn-success">
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

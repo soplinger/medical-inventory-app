@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   fetchAvailableDonations,
   recordDonation,
@@ -7,25 +7,12 @@ import {
 import Navigation from "./Navigation";
 
 const Donations = () => {
-  const [availableDonations, setAvailableDonations] = useState([]);
   const [donationData, setDonationData] = useState({
     userId: "",
     donations: [],
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]); // Make sure this is an array
-
-  useEffect(() => {
-    const loadAvailableDonations = async () => {
-      try {
-        const data = await fetchAvailableDonations();
-        setAvailableDonations(data || []);
-      } catch (error) {
-        console.error("Error fetching available donations:", error);
-      }
-    };
-    loadAvailableDonations();
-  }, []);
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleDonationChange = (index, field, value) => {
     const updatedDonations = donationData.donations.map((donation, i) => {
@@ -48,16 +35,27 @@ const Donations = () => {
   };
 
   const handleSearch = async () => {
+    if (!searchQuery) {
+      console.log("Please enter a search query.");
+      return;
+    }
     try {
-      const results = await searchDonations(
-        `?search=${encodeURIComponent(searchQuery)}`
-      );
-      // Ensure the results are always treated as an array
+      const results = await fetchAvailableDonations(searchQuery);
       setSearchResults(Array.isArray(results) ? results : []);
     } catch (error) {
-      console.error("Error searching donations:", error);
-      setSearchResults([]); // Ensure to reset to an empty array on error
+      console.error("Error searching available donations:", error);
+      setSearchResults([]);
     }
+  };
+
+  const populateForm = (item) => {
+    setDonationData({
+      ...donationData,
+      donations: [
+        ...donationData.donations,
+        { itemId: item.id, qty: 1, sent: "Network" }, // Assuming 'Network' as a default 'sent to' value
+      ],
+    });
   };
 
   const handleRecordDonation = async () => {
@@ -74,96 +72,85 @@ const Donations = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div>
       <Navigation />
-      <h2>Record a Donation</h2>
-      <div>
-        <input
-          type="text"
-          placeholder="User ID"
-          className="form-control my-2"
-          value={donationData.userId}
-          onChange={(e) =>
-            setDonationData({ ...donationData, userId: e.target.value })
-          }
-        />
-        {donationData.donations.map((donation, index) => (
-          <div key={index} className="input-group mb-3">
-            <input
-              type="number"
-              placeholder="Item ID"
-              className="form-control"
-              value={donation.itemId}
-              onChange={(e) =>
-                handleDonationChange(index, "itemId", e.target.value)
-              }
-            />
-            <input
-              type="number"
-              placeholder="Quantity"
-              className="form-control"
-              value={donation.qty}
-              onChange={(e) =>
-                handleDonationChange(index, "qty", e.target.value)
-              }
-            />
-            <input
-              type="text"
-              placeholder="Sent to"
-              className="form-control"
-              value={donation.sent}
-              onChange={(e) =>
-                handleDonationChange(index, "sent", e.target.value)
-              }
-            />
-          </div>
-        ))}
-        <button className="btn btn-primary" onClick={addDonationRow}>
-          Add Donation
-        </button>
-        <button className="btn btn-success" onClick={handleRecordDonation}>
-          Submit Donations
-        </button>
-      </div>
-
-      {/* Remove this section
-      <h2 className="mt-4">Search Donations</h2>
-      <div className="input-group mb-3">
-        <input
-          type="text"
-          placeholder="Search query"
-          className="form-control"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button className="btn btn-outline-secondary" onClick={handleSearch}>
-          Search
-        </button>
-      </div>
-      */}
-      <ul className="list-group">
-        {searchResults.map((result) => (
-          <li key={result.id} className="list-group-item">
-            {result.name} - Donated by: {result.userId}
-          </li>
-        ))}
-      </ul>
-
-      <h2 className="mt-4">Available Donations</h2>
-      <div className="list-group">
-        {availableDonations.map((donation) => (
-          <a
-            href="#"
-            key={donation.id}
-            className="list-group-item list-group-item-action flex-column align-items-start"
-          >
-            <div className="d-flex w-100 justify-content-between">
-              <h5 className="mb-1">{donation.name}</h5>
-              <small>Qty: {donation.qty}</small>
+      <div className="container mt-5">
+        <h2>Record a Donation</h2>
+        <div>
+          <input
+            type="text"
+            placeholder="User ID"
+            className="form-control my-2"
+            value={donationData.userId}
+            onChange={(e) =>
+              setDonationData({ ...donationData, userId: e.target.value })
+            }
+          />
+          {donationData.donations.map((donation, index) => (
+            <div key={index} className="input-group mb-3">
+              <input
+                type="number"
+                placeholder="Item ID"
+                className="form-control"
+                value={donation.itemId}
+                onChange={(e) =>
+                  handleDonationChange(index, "itemId", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                placeholder="Quantity"
+                className="form-control"
+                value={donation.qty}
+                onChange={(e) =>
+                  handleDonationChange(index, "qty", e.target.value)
+                }
+              />
+              <input
+                type="text"
+                placeholder="Sent to"
+                className="form-control"
+                value={donation.sent}
+                onChange={(e) =>
+                  handleDonationChange(index, "sent", e.target.value)
+                }
+              />
             </div>
-            <p className="mb-1">Value: {donation.val}</p>
-          </a>
-        ))}
+          ))}
+          <button className="btn btn-primary" onClick={addDonationRow}>
+            Add Donation
+          </button>
+          <button className="btn btn-success" onClick={handleRecordDonation}>
+            Submit Donations
+          </button>
+        </div>
+
+        <h2 className="mt-4">Search for Donatable Items</h2>
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            placeholder="Search query"
+            className="form-control"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="btn btn-outline-secondary" onClick={handleSearch}>
+            Search
+          </button>
+        </div>
+        <ul className="list-group">
+          {searchResults.map((result) => (
+            <li key={result.id} className="list-group-item">
+              {result.name} - Available Qty: {result.qty}
+              <button
+                className="btn btn-sm btn-primary"
+                onClick={() => populateForm(result)}
+              >
+                Select
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

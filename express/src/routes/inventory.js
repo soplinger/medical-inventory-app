@@ -10,6 +10,19 @@ const router = express.Router();
 const { pool } = require("../config/db");
 const authenticateToken = require("./authMiddleware");
 
+const addHistoryLog = async (item, user, data) => {
+  try {
+    const query = `
+      INSERT INTO history (item, user, data, time)
+      VALUES (?, ?, ?, NOW());
+    `;
+    const values = [item, user, JSON.stringify(data)];
+    await pool.query(query, values);
+  } catch (error) {
+    console.error("Error adding history log:", error);
+  }
+};
+
 router.get("/inventory", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -113,16 +126,14 @@ router.post("/inventory/addItem", authenticateToken, async (req, res) => {
     val,
   } = req.body;
 
-  console.log("Received data for item:", req.body); // Log the entire body to see what is received
-
   if (id) {
     // Update existing item
     try {
       const query = `
-                UPDATE items 
-                SET name = ?, parent = ?, alerts = ?, archived = ?, code = ?, img = ?, notes = ?, qty = ?, ref = ?, reo = ?, val = ?
-                WHERE id = ?
-            `;
+        UPDATE items
+        SET name = ?, parent = ?, alerts = ?, archived = ?, code = ?, img = ?, notes = ?, qty = ?, ref = ?, reo = ?, val = ?
+        WHERE id = ?;
+      `;
       const values = [
         name,
         parent,
@@ -137,11 +148,11 @@ router.post("/inventory/addItem", authenticateToken, async (req, res) => {
         val,
         id,
       ];
-
-      console.log("Executing update with values:", values); // Log the values array to be updated
-
       const result = await pool.query(query, values);
-      console.log("Update result:", result); // Log the result of the update query
+
+      // Log the update to history
+      const userData = req.user; // Assuming you have user info in req.user
+      addHistoryLog(id, 1, req.body);
 
       res.send({ message: "Item updated successfully.", updated: true });
     } catch (error) {
@@ -152,9 +163,9 @@ router.post("/inventory/addItem", authenticateToken, async (req, res) => {
     // Add new item
     try {
       const query = `
-                INSERT INTO items (name, parent, alerts, archived, code, img, notes, qty, ref, reo, val)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `;
+        INSERT INTO items (name, parent, alerts, archived, code, img, notes, qty, ref, reo, val)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `;
       const values = [
         name,
         parent,
@@ -168,11 +179,11 @@ router.post("/inventory/addItem", authenticateToken, async (req, res) => {
         reo,
         val,
       ];
-
-      console.log("Executing insert with values:", values); // Log the values array to be inserted
-
       const result = await pool.query(query, values);
-      console.log("Insert result:", result); // Log the result of the insert query
+
+      // Log the addition to history
+      const userData = req.user; // Assuming you have user info in req.user
+      addHistoryLog(result.insertId, 1, req.body);
 
       res.send({ message: "Item added successfully.", added: true });
     } catch (error) {

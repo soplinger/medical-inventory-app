@@ -12,6 +12,7 @@ const authRoutes = require("./routes/auth");
 const inventoryRoutes = require("./routes/inventory");
 const testRoutes = require("./routes/testing");
 const donationRoutes = require("./routes/donations");
+const historyRoutes = require("./routes/history");
 const path = require("path");
 
 const app = express();
@@ -22,7 +23,7 @@ const buildPath = path.join("/root", "react-app", "build");
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -34,6 +35,7 @@ app.use("/api", authRoutes);
 app.use("/api", inventoryRoutes);
 app.use("/api", testRoutes);
 app.use("/api", donationRoutes);
+app.use("/api", historyRoutes);
 
 // Serve static files from the React app
 app.use(express.static(buildPath));

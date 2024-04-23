@@ -42,7 +42,7 @@ function Register() {
         <div className="col-md-6">
           <form onSubmit={handleSubmit} className="card">
             <div className="card-body">
-              <h5 className="card-title mb-4">Register</h5>s
+              <h5 className="card-title mb-4">Account Registration</h5>
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
                   Password:
@@ -96,20 +96,26 @@ function Register() {
                   Role:
                 </label>
                 {/* Use either dropdown or autocomplete for role selection */}
-                {/* Dropdown Menu */}
-                * <select
+                {/* Dropdown Menu */}*{" "}
+                <select
                   className="form-select"
                   id="role"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                 >
                   <option value="">Select Role</option>
-                  <option value="Medical Effects and Fabrication Technician">Medical Effects and Fabrication Technician</option>
-                  <option value="Simulation Coordinator">Simulation Coordinator</option>
-                  <option value="Simulation Education Manager">Simulation Education Manager</option>
+                  <option value="Medical Effects and Fabrication Technician">
+                    Medical Effects and Fabrication Technician
+                  </option>
+                  <option value="Simulation Coordinator">
+                    Simulation Coordinator
+                  </option>
+                  <option value="Simulation Education Manager">
+                    Simulation Education Manager
+                  </option>
+                  <option>Student Intern</option>
                   {/* Add other role options as needed */}
-                 </select> 
-
+                </select>
                 {/* Autocomplete */}
                 {/* <input
                   type="text"

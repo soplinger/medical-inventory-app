@@ -23,39 +23,41 @@ function Metrics() {
     );
 
   return (
-    <div className="container mt-5">
-      <Navigation />
-      <h1 className="mb-4">Inventory Metrics</h1>
-      <div className="row">
-        <div className="col-md-3">
-          <div className="card text-white bg-primary mb-3">
-            <div className="card-header">Unique Items</div>
-            <div className="card-body">
-              <h5 className="card-title">{metrics.uniqueItems}</h5>
+    <div>
+      <Navigation /> {/* Include the Navigation component */}
+      <div className="container mt-5">
+        <h1 className="mb-4">Inventory Metrics</h1>
+        <div className="row">
+          <div className="col-md-3">
+            <div className="card text-white bg-primary mb-3">
+              <div className="card-header">Unique Items</div>
+              <div className="card-body">
+                <h5 className="card-title">{metrics.uniqueItems}</h5>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card text-white bg-success mb-3">
-            <div className="card-header">Total Items</div>
-            <div className="card-body">
-              <h5 className="card-title">{metrics.totalItems}</h5>
+          <div className="col-md-3">
+            <div className="card text-white bg-success mb-3">
+              <div className="card-header">Total Items</div>
+              <div className="card-body">
+                <h5 className="card-title">{metrics.totalItems}</h5>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card text-white bg-info mb-3">
-            <div className="card-header">Total Value</div>
-            <div className="card-body">
-              <h5 className="card-title">${metrics.totalValue}</h5>
+          <div className="col-md-3">
+            <div className="card text-white bg-info mb-3">
+              <div className="card-header">Total Value</div>
+              <div className="card-body">
+                <h5 className="card-title">${metrics.totalValue}</h5>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card text-white bg-warning mb-3">
-            <div className="card-header">Out of Stock</div>
-            <div className="card-body">
-              <h5 className="card-title">{metrics.outOfStock}</h5>
+          <div className="col-md-3">
+            <div className="card text-white bg-warning mb-3">
+              <div className="card-header">Out of Stock</div>
+              <div className="card-body">
+                <h5 className="card-title">{metrics.outOfStock}</h5>
+              </div>
             </div>
           </div>
         </div>
