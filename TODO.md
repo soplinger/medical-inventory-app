@@ -7,7 +7,7 @@
 
 ## ADD HISTORY PAGE
 
-- Using history table, display all history data within a page
+- [x] Using history table, display all history data within a page
 
 ## ADD USER REGISTRATION PAGE
 
